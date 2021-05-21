@@ -1,4 +1,5 @@
 const User = require('../model/User');
+const Post = require('../model/Post');
 const bcrypt = require('bcryptjs');
 
 module.exports = {
@@ -18,7 +19,7 @@ module.exports = {
     }
   },
 
-  async login(req, res) {
+  async login(req, res, next) {
     const{email, password} = req.body;
     
     const user = await User.findOne({email}).select('+password');
@@ -32,7 +33,11 @@ module.exports = {
     }
 
     req.session.user = user;
-    res.send({user});
+    if(req.session.user.email == "admin@gmail.com") {
+      next();
+    } else {
+      return res.send({user});
+    }
   },
 
   async logout(req, res) {
@@ -42,5 +47,27 @@ module.exports = {
       });
       res.status(200).send('Usuário Deslogado');
     }
-  }
+  },
+  
+  async fetchPost(req, res) {
+    const data = {title: req.body.title}
+    const posts = await Post.find(data).sort('-createdAt');
+    return res.send(posts);
+  },
+  
+  async insertPosts(req, res) {
+    const {title, urlImage, urlRecipe} = req.body;
+    try {
+      if(await Post.findOne({title})) {
+        return res.status(409).send({error: 'Receita já existe'});
+      }
+
+      const posts = await Post.create(req.body);
+      return res.send({posts});
+
+    }
+    catch(err) {
+      return res.status(400).send({error: 'Falha no cadastro'});
+    }
+  },
 };

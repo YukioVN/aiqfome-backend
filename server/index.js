@@ -24,6 +24,7 @@ const connectDB = async () => {
       useCreateIndex: true
     });
   console.log('BD conectado');
+  app.listen(Port, () => console.log(`Servidor na porta ${Port}`));
 }
 
 connectDB();
@@ -45,5 +46,3 @@ app.use(
 );
 
 app.use(router);
-
-app.listen(Port, () => console.log(`Servidor na porta ${Port}`));
