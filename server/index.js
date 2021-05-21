@@ -4,9 +4,10 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cors = require('cors');
 const router = require('./routes');
+require("dotenv").config();
 
 const app = express();
-const Port = process.env.Port || 3030;
+const Port = process.env.PORT || 3030;
 
 const Uri = 'mongodb+srv://dbUser:dbUser@clusteraiq.pe7ab.mongodb.net/myFirstDatabase';
 
