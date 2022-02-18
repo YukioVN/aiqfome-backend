@@ -1,0 +1,7 @@
+Olá mundo
+
+git estágios (status)
+untracked -> track (rastrear)
+staged
+modified
+updated
